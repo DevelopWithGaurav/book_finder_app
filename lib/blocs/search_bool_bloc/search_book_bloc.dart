@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/searched_book_model.dart';
-import '../../network/controllers/search_controller.dart';
+import '../../network/controllers/book_controller.dart';
 import '../../utils.dart';
 
 part 'search_book_event.dart';
@@ -34,7 +34,7 @@ class SearchBookBloc extends Bloc<SearchBookEvent, SearchBookState> {
     emit(state.copyWith(status: SearchBookStatus.loading));
 
     try {
-      final response = await SearchBookController().searchBooks(query: event.query.trim(), page: page);
+      final response = await BookController().searchBooks(query: event.query.trim(), page: page);
 
       if (response != null && response.statusCode == 200 && response.data['docs'] != null && response.data['docs'] is List) {
         if ((response.data['docs'] as List).isEmpty) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/bloc/search_book_bloc.dart';
+import '../../blocs/search_bool_bloc/search_book_bloc.dart';
 import '../../constants.dart';
 import '../../generated/assets.dart';
 import '../../utils.dart';
