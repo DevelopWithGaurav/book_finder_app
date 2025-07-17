@@ -1,14 +1,14 @@
-import 'package:book_finder_app/widgets/custom_image.dart';
-import 'package:book_finder_app/widgets/custom_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/bloc/search_book_bloc.dart';
-import '../constants.dart';
-import '../generated/assets.dart';
-import '../helper/book_cover_helper.dart';
-import '../utils.dart';
-import '../widgets/empty_event_widget.dart';
+import '../../blocs/bloc/search_book_bloc.dart';
+import '../../constants.dart';
+import '../../generated/assets.dart';
+import '../../utils.dart';
+import '../../widgets/custom_image.dart';
+import '../../widgets/custom_shimmer.dart';
+import '../../widgets/empty_event_widget.dart';
+import 'searched_item_widget.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -145,20 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                               final requiredItem = state.searchResult[index];
 
-                              return ListTile(
-                                leading: SizedBox(
-                                  height: 55,
-                                  width: 40,
-                                  child: CustomImage(
-                                    path: BookCoverHelper.getBookCover(coverKey: requiredItem.coverEditionKey ?? '', isThumbnail: true),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                title: Text(requiredItem.title ?? 'NA'),
-                                subtitle: Text(
-                                  'by ${(requiredItem.authorName ?? []).isNotEmpty ? (requiredItem.authorName ?? []).first : 'NA'}',
-                                ),
-                              );
+                              return SearchedItemWidget(requiredItem: requiredItem);
                             },
                           );
               },
