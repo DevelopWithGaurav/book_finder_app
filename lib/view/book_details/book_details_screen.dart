@@ -1,3 +1,4 @@
+import 'package:book_finder_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,6 +24,10 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
   @override
   void initState() {
     super.initState();
+
+    Utils.customLog(widget.lendingEditionS, name: 'lendingEditionS');
+    Utils.customLog(widget.authorName, name: 'authorName');
+    Utils.customLog(widget.coverKey, name: 'coverKey');
 
     context.read<BookDetailsBloc>().add(FetchDetails(lendingEditionS: widget.lendingEditionS));
   }
