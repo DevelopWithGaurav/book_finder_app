@@ -51,6 +51,8 @@ class _SearchScreenState extends State<SearchScreen> {
         onRefresh: () async {
           if ((_searchController.text).length >= 3) {
             context.read<SearchBookBloc>().add(Search(query: _searchController.text));
+          } else if ((_searchController.text).isEmpty) {
+            context.read<SearchBookBloc>().add(FetchStoredBooks());
           }
         },
         child: CustomScrollView(
