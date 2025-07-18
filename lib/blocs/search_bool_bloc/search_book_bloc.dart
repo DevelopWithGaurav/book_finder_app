@@ -11,6 +11,7 @@ import '../../utils.dart';
 part 'search_book_event.dart';
 part 'search_book_state.dart';
 
+/// Bloc responsible for handling book search and retrieving locally stored books.
 class SearchBookBloc extends Bloc<SearchBookEvent, SearchBookState> {
   SearchBookBloc() : super(const SearchBookState()) {
     on<Search>(_searchBooks);
@@ -19,6 +20,7 @@ class SearchBookBloc extends Bloc<SearchBookEvent, SearchBookState> {
 
   int page = 1;
 
+  /// Handles the Search event to fetch books from API based on a query.
   Future<void> _searchBooks(Search event, Emitter<SearchBookState> emit) async {
     Utils.customLog('searchBooks CALLED');
 
@@ -78,6 +80,7 @@ class SearchBookBloc extends Bloc<SearchBookEvent, SearchBookState> {
     }
   }
 
+  /// Handles FetchStoredBooks event to load locally stored book data from the database.
   Future<void> _fetchStoredBooks(FetchStoredBooks event, Emitter<SearchBookState> emit) async {
     Utils.customLog('fetchStoredBooks CALLED');
 

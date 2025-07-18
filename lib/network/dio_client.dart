@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 
 import 'api_endpoint.dart';
 
+/// A reusable HTTP client wrapper around Dio for making GET and POST requests.
+/// Handles base configuration, logging, and error management centrally.
 class DioClient {
   final Dio _dio = Dio(
     BaseOptions(
@@ -28,6 +30,11 @@ class DioClient {
     ),
   );
 
+  /// Generic GET request method.
+  ///
+  /// [path]: Relative API endpoint path.
+  /// [parameters]: Optional query parameters.
+  /// Logs the response in debug mode and returns the Response object.
   Future<Response?> getData({required String path, Map<String, Object> parameters = const {}}) async {
     try {
       final Response response = await _dio.get(path, queryParameters: parameters);
@@ -45,6 +52,11 @@ class DioClient {
     }
   }
 
+  /// Generic POST request method.
+  ///
+  /// [path]: Relative API endpoint path.
+  /// [body]: Request body (can be JSON or Map).
+  /// Logs the response in debug mode and returns the Response object.
   Future<Response?> postData({required String path, dynamic body}) async {
     try {
       final Response response = await _dio.post(path, data: body);

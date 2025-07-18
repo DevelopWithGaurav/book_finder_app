@@ -3,10 +3,10 @@ import 'package:path/path.dart';
 
 import 'book_finder_db.dart';
 
+/// A singleton-style service class for initializing and managing the app-wide database connection.
 class DatabaseService {
   static const _databaseName = "book_finder.db";
 
-  // only have a single app-wide reference to the database
   Database? _database;
 
   Future<Database> get database async {

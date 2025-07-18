@@ -10,11 +10,13 @@ import '../../utils.dart';
 part 'book_details_event.dart';
 part 'book_details_state.dart';
 
+/// Bloc class to handle book detail fetching logic using BLoC architecture.
 class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
   BookDetailsBloc() : super(const BookDetailsState()) {
     on<FetchDetails>(_fetchDetails);
   }
 
+  /// Handles the FetchDetails event to retrieve book detail from API.
   Future<void> _fetchDetails(FetchDetails event, Emitter<BookDetailsState> emit) async {
     Utils.customLog('fetchDetails CALLED');
 
