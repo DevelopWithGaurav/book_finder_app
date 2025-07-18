@@ -23,6 +23,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
+    context.read<SearchBookBloc>().add(FetchStoredBooks());
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         if ((_searchController.text).length >= 3) {

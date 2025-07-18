@@ -5,6 +5,7 @@ List<SearchedBookModel> searchedBookModelFromJson(String str) => List<SearchedBo
 String searchedBookModelToJson(List<SearchedBookModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class SearchedBookModel {
+  dynamic id;
   List<String>? authorKey;
   List<String>? authorName;
   String? coverEditionKey;
@@ -26,6 +27,7 @@ class SearchedBookModel {
   List<String>? idProjectGutenberg;
 
   SearchedBookModel({
+    this.id,
     this.authorKey,
     this.authorName,
     this.coverEditionKey,
@@ -48,6 +50,7 @@ class SearchedBookModel {
   });
 
   factory SearchedBookModel.fromJson(Map<String, dynamic> json) => SearchedBookModel(
+        id: json["id"],
         authorKey: json["author_key"] == null ? [] : List<String>.from(json["author_key"]!.map((x) => x)),
         authorName: json["author_name"] == null ? [] : List<String>.from(json["author_name"]!.map((x) => x)),
         coverEditionKey: json["cover_edition_key"],
@@ -70,6 +73,7 @@ class SearchedBookModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "author_key": authorKey == null ? [] : List<dynamic>.from(authorKey!.map((x) => x)),
         "author_name": authorName == null ? [] : List<dynamic>.from(authorName!.map((x) => x)),
         "cover_edition_key": coverEditionKey,

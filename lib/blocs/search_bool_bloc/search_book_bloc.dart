@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../database/book_finder_db.dart';
 import '../../models/searched_book_model.dart';
 import '../../network/controllers/book_controller.dart';
 import '../../utils.dart';
@@ -13,6 +14,7 @@ part 'search_book_state.dart';
 class SearchBookBloc extends Bloc<SearchBookEvent, SearchBookState> {
   SearchBookBloc() : super(const SearchBookState()) {
     on<Search>(_searchBooks);
+    on<FetchStoredBooks>(_fetchStoredBooks);
   }
 
   int page = 1;
@@ -42,7 +44,26 @@ class SearchBookBloc extends Bloc<SearchBookEvent, SearchBookState> {
         }
 
         if (page == 1) {
-          emit(state.copyWith(status: SearchBookStatus.success, searchResult: searchedBookModelFromJson(jsonEncode(response.data['docs']))));
+          List<SearchedBookModel>? searchResult = searchedBookModelFromJson(jsonEncode(response.data['docs']));
+
+          final List dataToInsertInDB = [];
+          for (var e in searchResult) {
+            dataToInsertInDB.add(
+              {
+                BookFinderDb.title: e.title,
+                BookFinderDb.coverKey: e.coverEditionKey,
+                BookFinderDb.authorName: (e.authorName ?? []).isNotEmpty ? (e.authorName ?? []).first : null,
+                BookFinderDb.lendingEditionS: e.lendingEditionS,
+              },
+            );
+          }
+
+          final localDBResponse = await BookFinderDb().insertInBookTable(dataToInsertInDB);
+          if (localDBResponse == -1) {
+            //
+          }
+
+          emit(state.copyWith(status: SearchBookStatus.success, searchResult: searchResult));
         } else {
           final lastData = state.searchResult;
           lastData.addAll(searchedBookModelFromJson(jsonEncode(response.data['docs'])));
@@ -54,6 +75,31 @@ class SearchBookBloc extends Bloc<SearchBookEvent, SearchBookState> {
     } catch (e) {
       emit(state.copyWith(status: SearchBookStatus.failure));
       Utils.customLog(e.toString(), name: 'ERROR at searchBooks');
+    }
+  }
+
+  Future<void> _fetchStoredBooks(FetchStoredBooks event, Emitter<SearchBookState> emit) async {
+    Utils.customLog('fetchStoredBooks CALLED');
+
+    emit(state.copyWith(status: SearchBookStatus.loading));
+
+    try {
+      final List<SearchedBookModel> fetchedBooks = [];
+
+      final localDBResponse = await BookFinderDb().getAllStoredBooks(page: 1);
+      for (var e in localDBResponse) {
+        fetchedBooks.add(SearchedBookModel(
+          title: e[BookFinderDb.title] ?? '',
+          coverEditionKey: e[BookFinderDb.coverKey] ?? '',
+          authorName: [(e[BookFinderDb.authorName] ?? '')],
+          lendingEditionS: e[BookFinderDb.lendingEditionS] ?? '',
+        ));
+      }
+
+      emit(state.copyWith(status: SearchBookStatus.success, searchResult: fetchedBooks));
+    } catch (e) {
+      emit(state.copyWith(status: SearchBookStatus.failure));
+      Utils.customLog(e.toString(), name: 'ERROR at fetchStoredBooks');
     }
   }
 }

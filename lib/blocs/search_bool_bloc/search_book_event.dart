@@ -13,3 +13,5 @@ class Search extends SearchBookEvent {
 
   const Search({this.paginate = false, required this.query});
 }
+
+class FetchStoredBooks extends SearchBookEvent {}
